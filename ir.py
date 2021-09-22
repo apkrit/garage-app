@@ -27,7 +27,7 @@ try:
         # Need to look into the reasoning behind this - 
         # Seems as though it should be the other way around.
         if GPIO.input(pir_port) == 0:
-            print("Garage Door is Closed at " + currentTime.strftime("%H:%M:%S %p on %m-%d-%Y"))
+            print("Garage Door is Closed at " + currentTime.strftime("%I:%M:%S %p on %m-%d-%Y"))
         else:
             # If not 0, then sensor detects nothing. 
             print("Garage Door is Open at " + currentTime.strftime("%I:%M:%S %p on %m-%d-%Y"))
