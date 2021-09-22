@@ -1,32 +1,35 @@
-# import library for GPIO
+# Imports library for GPIO interface.
 import RPi.GPIO as GPIO
-# print GPIO info
+# Prints info of GPIO device.
 print(GPIO.RPI_INFO)
 
-# time library
+# Imports time library for sleep.
 import time
 
-# Port of PIR
+# Sets GPI port of IR sensor.
 pir_port = 4
 
-# Setup GPIO mode to Broadcom
+# Setup GPIO mode to Broadcom.
+# Need to look more into how this works. 
 GPIO.setmode(GPIO.BCM)
 
-# configure the pin as input pin
+# Sets input pin to the IR pin.  
 GPIO.setup(pir_port,  GPIO.IN)
 
-# do the loop
+# Permanent loop unitil user cancels with Ctrl C.
 try:
     while (True):
-        # if the input is zero, nobody is there at the sensor
+        # If the input is 0, sensor detects an obstacle.
+        # Need to look into the reasoning behind this - 
+        # Seems as though it should be the other way around.
         if GPIO.input(pir_port) == 0:
             print("Garage Door is Closed.")
         else:
-            # found somebody at the sensor
+            # If not 0, then sensor detects nothing. 
             print("Garage Door is Open.")
-        # wait for 1 sec whether you detect someone or not
+        # Waits for 1 second for sensor input. 
         time.sleep(1)
-# If user presses ^C cleanup the GPIO
+# If user presses Ctrl C, clean GPIO and exit. 
 except KeyboardInterrupt:
     GPIO.cleanup()
 print("Exiting")
