@@ -1,13 +1,42 @@
+# Imports Python interface for PostgreSQL database
+import psycopg2
+
 # Imports library for GPIO interface.
 import RPi.GPIO as GPIO
 # Prints info of GPIO device.
 print(GPIO.RPI_INFO)
+print()
 
 # Imports library for displaying time..
 import datetime
 
 # Imports time library for sleep.
 import time
+
+# Creates database connection
+conn = psycopg2.connect('dbname=garagedb')
+curr = conn.cursor()
+
+
+def get_all_sensor_input():
+    query = """
+    SELECT
+        *
+    FROM
+        sensorlog
+    """
+    curr.execute(query)
+    return curr.fetchall()
+
+sensor_results = get_all_sensor_input()
+
+print('---------------------------------------------')
+print('Printing garagedb sensorlog table content')
+for result in sensor_results:
+    print(result)
+print('End of garagedb sensorlog table results')
+print('---------------------------------------------')
+print()
 
 # Sets GPI port of IR sensor.
 pir_port = 4
@@ -20,6 +49,8 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(pir_port,  GPIO.IN)
 
 # Permanent loop unitil user cancels with Ctrl C.
+print('---------------------------------------------')
+print('Begining display of live sensor results:')
 try:
     while (True):
         currentTime = datetime.datetime.now()
@@ -37,4 +68,5 @@ try:
 except KeyboardInterrupt:
     GPIO.cleanup()
 print("Exiting")
+print('---------------------------------------------')
 
