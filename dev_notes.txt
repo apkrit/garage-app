@@ -1,0 +1,41 @@
+Project Setup (In Development)
+
+Virtual Environment: 
+a) Activate Environment
+	1)  Navigate to project directory containing hidden .venv directory.
+		- Use "ls -a" to display hidden directory if needed
+	2) Enter cmd "source .venv/bin/activate" 
+b) Deactivate Environment
+	1) Simply enter cmd "deactivate"
+
+Development Version of Garage Tracker:
+a) Start ir.py sensor and log program
+	1) Enter cmd "python ir.py"
+b) Exit ir.py sensor and log program 
+	1) Press Ctrl+C 
+
+Postgresql Database:
+a) Connect to Postgresql interface via CLI
+	1) Enter "psql"
+b) Connect to garagedb database
+	1) Enter cmd "\c garagedb"
+	2) Can also combine "psql garagedb" to both start psql CLI and connect to db.
+b) Disconnect from db and psql CLI
+	1) Enter cmd "\q"
+	
+Django Server:
+a) Start Server:
+	1) Navigate to directory containing manage.py file
+	2) Enter cmd "python manage.py runserver"
+b) Start Server w/ Access Provided to Local Network:
+	1) Navigate to directory containing manage.py file
+	2) Enter cmd "python manage.py runserver 0:8000"
+		- 0 here is a shortcut for 0.0.0.0
+c) Access server from other computer on network:
+	1) Enter IP address and port of server into web browser ex: 192.168.1.100:8000\admin
+		-May need to update settings.py in mysite directory to include the IP adress in ALLOWED_HOSTS,
+		as there is no static IP address yet for the Raspberry Pi
+d) Shutdown Server:
+	1) Enter Ctrl+C
+
+
