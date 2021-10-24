@@ -1,5 +1,28 @@
 Project Setup (In Development)
 
+Establish Static IP Address: 
+a) Edit dhcpcd.conf file
+	1) Enter cmd "sudo vim /etc/bin/dhcpcd.conf"
+	2) Get network interface type with cmd "ip r | grep default"
+		- First IP is the network IP, field after 'dev' is the interface type.
+	3) Confirm DNS gateway with cmd "cat /etc/resolv.conf"
+		- Nameserver is the gateway, which may be the same as IP address.
+	2) Fill following bracketed fields depending on information of network and desired static IP. Brackets encapsulate examples, and should not be included in file.
+		interface {wlan0}
+		static ip_address={192.168.1.10}
+		static routers={192.168.1.1}
+		static domain_name_servers={192.168.1.1} 
+
+SSH Connection:
+a) Connect 
+	1) Enter cmd "ssh {IP Address}" to access Raspberry Pi Zero W
+		- SSH has to be previously enabled for headless operation. 
+		- If static IP is not set for device, may eventually need to find new IP address. 
+	2) Confirm connection prompt by typing and entering yes
+	3) Enter in password for Raspberry Pi Zero W account
+b) Disconnect 
+	1) Enter cmd "exit" 
+
 Virtual Environment: 
 a) Activate Environment
 	1)  Navigate to project directory containing hidden .venv directory.
