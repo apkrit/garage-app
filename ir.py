@@ -1,3 +1,10 @@
+# Import os for env variabes 
+import os
+
+# Import environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
 # Imports Python interface for PostgreSQL database
 import psycopg2
 
@@ -12,6 +19,9 @@ import datetime
 
 # Imports time library for sleep.
 import time
+
+# Twilio import for texting
+from twilio.rest import Client
 
 # Creates database connection
 conn = psycopg2.connect('dbname=garagedb')
@@ -37,6 +47,21 @@ def add_sensor_record(status, time):
     values = (status, time)
     cursor.execute(query, values)
 
+def send_message():
+    # Find your Account SID and Auth Token at twilio.com/console
+    # and set the environment variables. See http://twil.io/secure
+    account_sid = os.environ['TWILIO_ACCOUNT_SID']
+    auth_token = os.environ['TWILIO_AUTH_TOKEN']
+    twiliophone = os.environ['TWILIO_PHONENUMBER']
+    userphone = os.environ['USER_PHONENUMBER']
+    client = Client(account_sid, auth_token)
+    message = client.messages.create(
+                              body='Garage door may have been left open.',
+                              from_=twiliophone,
+                              to=userphone
+                          )
+    # print(message.sid)
+
 sensor_results = get_all_sensor_input()
 
 print('---------------------------------------------')
@@ -61,6 +86,8 @@ GPIO.setup(pir_port,  GPIO.IN)
 lastStatus = None
 print('---------------------------------------------')
 print('Begining display of live sensor results:')
+
+timeOpen = 0
 try:
     while (True):
         currentTime = datetime.datetime.now()
@@ -71,6 +98,7 @@ try:
         # Seems as though it should be the other way around.
         if GPIO.input(pir_port) == 0:
             garageStatus = 'Closed'
+            timeOpen = 0
         else:
             # If not 0, then sensor detects nothing, so door is open.
             garageStatus = 'Open'
@@ -83,6 +111,12 @@ try:
             print('Garage status has changed!')
             add_sensor_record(garageStatus, currentTime)
             conn.commit()
+        if garageStatus == 'Open':
+            timeOpen += 1
+            if timeOpen > 10:
+                print("Sending Text Message!")
+                send_message()
+                timeOpen = 0
         lastStatus = garageStatus
         garageStatusReadout = f"Garage door is {garageStatus} at {currentTime}"
         print(garageStatusReadout)
@@ -96,4 +130,3 @@ finally:
     conn.close()
 print("Exiting")
 print('---------------------------------------------')
-

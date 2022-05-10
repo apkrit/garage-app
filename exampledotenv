@@ -1,0 +1,4 @@
+TWILIO_ACCOUNT_SID='Your Twilio SID Here (include the '')'
+TWILIO_AUTH_TOKEN='Your Twilio Auth Token Here (indlude the '')'
+TWILIO_PHONENUMBER='+Your Twilio phone number here (include the + and '')'
+USER_PHONENUMBER='+User phone numbere here (include the + and '')'
